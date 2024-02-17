@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  basilisk:
+    image: node:20-alpine
+    environment:
+      - NODE_ENV=development
+    command: sh -c "if [ \$NODE_ENV = 'development' ]; then npm run dev; else npm run build && npm run start; fi"
