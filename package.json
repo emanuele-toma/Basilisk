@@ -28,6 +28,8 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.4",
     "mongoose": "^8.1.3"
   }
 }

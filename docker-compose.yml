@@ -1,16 +1,18 @@
 version: '3.8'
 services:
   main:
+    container_name: main
     image: node:20-alpine
     volumes:
       - .:/app
     working_dir: /app
     environment:
       - NODE_ENV=${NODE_ENV:-development}
-    command: sh -c "if [ '$NODE_ENV' = 'production' ]; then npm install && ./node_modules/.bin/webpack && node ./dist/index.js; else npm install && ./node_modules/.bin/webpack --watch; fi"
+    command: sh -c "if [ '$NODE_ENV' = 'production' ]; then npm install && npm run build && npm run start; else npm install && npm run dev; fi"
     networks:
       - basilisk_network
   mongo:
+    container_name: mongo
     image: mongo:latest
     volumes:
       - mongo_data:/data/db
