@@ -1,5 +1,10 @@
 import { Database } from '@/db';
-import { ApplicationCommandOptionType, ChannelType, VoiceChannel } from 'discord.js';
+import {
+  ApplicationCommandOptionType,
+  ChannelType,
+  PermissionsBitField,
+  VoiceChannel,
+} from 'discord.js';
 import { BasiliskCommand } from '../types';
 
 export const addChannel: BasiliskCommand = {
@@ -17,6 +22,16 @@ export const addChannel: BasiliskCommand = {
   ],
   onExecute: async interaction => {
     const channel = interaction.options.getChannel('channel');
+
+    // check permissions
+    if (
+      !(interaction.member?.permissions as PermissionsBitField).has(
+        PermissionsBitField.Flags.ManageChannels
+      )
+    ) {
+      await interaction.reply('You do not have permission to manage channels');
+      return;
+    }
 
     // check channel
     if (!channel) {
