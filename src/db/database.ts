@@ -9,7 +9,12 @@ class Database {
   private constructor() {
     // Connect to the database
     this.connection = createConnection(
-      `mongodb://${CONFIG.MONGO_HOST}:${CONFIG.MONGO_PORT}/${CONFIG.MONGO_DB}`
+      `mongodb://${CONFIG.MONGO_HOST}:${CONFIG.MONGO_PORT}/${CONFIG.MONGO_DB}`,
+      {
+        authSource: 'admin',
+        user: CONFIG.MONGO_USER,
+        pass: CONFIG.MONGO_PASS,
+      }
     );
 
     // Log errors

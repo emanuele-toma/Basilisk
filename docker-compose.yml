@@ -18,11 +18,16 @@ services:
       - mongo_data:/data/db
     ports:
       - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER:-root}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS:-root}
+      - MONGO_INITDB_DATABASE=${MONGO_DB:-basilisk}
     networks:
       - basilisk_network
 
 networks:
   basilisk_network:
+    name: basilisk_network
     driver: bridge
 
 volumes:
