@@ -1,7 +1,28 @@
 version: '3.8'
 services:
-  basilisk:
+  main:
     image: node:20-alpine
+    volumes:
+      - .:/app
+    working_dir: /app
     environment:
-      - NODE_ENV=development
-    command: sh -c "if [ \$NODE_ENV = 'development' ]; then npm run dev; else npm run build && npm run start; fi"
+      - NODE_ENV=${NODE_ENV:-development}
+    command: sh -c "if [ '$NODE_ENV' = 'production' ]; then npm install && ./node_modules/.bin/webpack && node ./dist/index.js; else npm install && ./node_modules/.bin/webpack --watch; fi"
+    networks:
+      - basilisk_network
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - basilisk_network
+
+networks:
+  basilisk_network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
