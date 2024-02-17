@@ -1,10 +1,16 @@
 import { Database } from '@/db';
-import { ApplicationCommandOptionType, ChannelType, VoiceChannel } from 'discord.js';
+import {
+  ApplicationCommandOptionType,
+  ChannelType,
+  PermissionsBitField,
+  VoiceChannel,
+} from 'discord.js';
 import { BasiliskCommand } from '../types';
 
 export const addChannel: BasiliskCommand = {
   name: 'add-channel',
   description: 'Start tracking a channel to create temporary voice channels in.',
+  defaultMemberPermissions: [PermissionsBitField.Flags.ManageChannels],
   options: [
     {
       name: 'channel',
