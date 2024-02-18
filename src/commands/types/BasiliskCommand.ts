@@ -1,5 +1,8 @@
-import { ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord.js';
 
-export interface BasiliskCommand extends ChatInputApplicationCommandData {
+export interface BasiliskCommand extends RESTPostAPIChatInputApplicationCommandsJSONBody {
   onExecute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }

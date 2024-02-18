@@ -2,7 +2,7 @@ import { Database } from '@/db';
 import {
   ApplicationCommandOptionType,
   ChannelType,
-  PermissionsBitField,
+  PermissionFlagsBits,
   VoiceChannel,
 } from 'discord.js';
 import { BasiliskCommand } from '../types';
@@ -10,25 +10,26 @@ import { BasiliskCommand } from '../types';
 export const addChannel: BasiliskCommand = {
   name: 'add-channel',
   description: 'Start tracking a channel to create temporary voice channels in.',
-  defaultMemberPermissions: ['ManageChannels'],
+  default_member_permissions: PermissionFlagsBits.ManageChannels.toString(),
+  dm_permission: false,
   options: [
     {
       name: 'channel',
       type: ApplicationCommandOptionType.Channel,
       description: 'The channel to add',
       required: true,
-      channelTypes: [ChannelType.GuildVoice],
+      channel_types: [ChannelType.GuildVoice],
     },
   ],
   onExecute: async interaction => {
+    console.log(interaction.member);
+    interaction.member?.permissions;
     const channel = interaction.options.getChannel('channel');
+    // fetch by id
+    const guildMember = await interaction.guild?.members.fetch(interaction.user.id);
 
-    // check permissions
-    if (
-      !(interaction.member?.permissions as PermissionsBitField).has(
-        PermissionsBitField.Flags.ManageChannels
-      )
-    ) {
+    // check if user has permission to manage channels
+    if (!guildMember?.permissions.has('ManageChannels')) {
       await interaction.reply('You do not have permission to manage channels');
       return;
     }

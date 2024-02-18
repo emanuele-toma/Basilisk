@@ -6,9 +6,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app
-    environment:
-      - NODE_ENV=${NODE_ENV:-development}
-    command: sh -c "if [ '$NODE_ENV' = 'production' ]; then npm install && npm run build && npm run start; else npm install && npm run dev; fi"
+    command: sh -c "if [ '${NODE_ENV:-development}' = 'production' ]; then npm install && npm run build && npm run start; else npm install && npm run dev; fi"
     networks:
       - basilisk_network
   mongo:

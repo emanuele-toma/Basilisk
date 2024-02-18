@@ -1,9 +1,8 @@
-import { commands, registerGuildCommands } from '@/commands';
+import { commands } from '@/commands';
 import { CONFIG } from '@/config';
 import { Database, IServerConfig } from '@/db';
 import {
   ChannelType,
-  ChatInputCommandInteraction,
   Client,
   GatewayIntentBits,
   PermissionsBitField,
@@ -12,7 +11,7 @@ import {
 import { registerCommands } from './commands/utils/registerCommands';
 
 const client = new Client({
-  intents: [GatewayIntentBits.GuildVoiceStates],
+  intents: [GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.Guilds],
 });
 
 client.on('ready', () => {
@@ -21,17 +20,17 @@ client.on('ready', () => {
 
   registerCommands({ commands });
 
-  registerGuildCommands({ guildId: CONFIG.DEV_GUILD_ID, commands });
+  // registerGuildCommands({ guildId: CONFIG.DEV_GUILD_ID, commands });
 
   Database.getInstance().getConnection();
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
+  if (!interaction.isChatInputCommand()) return;
 
   commands.forEach(command => {
     if (interaction.commandName === command.name) {
-      command.onExecute(interaction as ChatInputCommandInteraction);
+      command.onExecute(interaction);
     }
   });
 });
